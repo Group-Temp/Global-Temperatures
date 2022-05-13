@@ -5,6 +5,7 @@ import string
 import nltk
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 from string import punctuation
 
 data1 = pd.read_csv('../data/kaggle_twitter_data.csv')
@@ -26,12 +27,13 @@ data = pd.concat(frames, ignore_index=True)
 #Drop rows with NA or NAN
 data = data.dropna()
 
+df=data['tweet']
 #Make tweet to str
-data['tweet']=data['tweet'].apply(str)
+df=df.apply(str)
 
 #Removing RT and link
-data['tweet']=data['tweet'].apply(lambda x: re.sub(r'\bRT\b','',x).strip())
-data['tweet']=data['tweet'].apply(lambda x: re.sub(r'\blink\b','',x).strip())
+df=df.apply(lambda x: re.sub(r'\bRT\b','',x).strip())
+df=df.apply(lambda x: re.sub(r'\blink\b','',x).strip())
 
 #Remove contractions
 def contractions(s):
@@ -48,40 +50,53 @@ def contractions(s):
     s = re.sub(r"\'ve", " have", s)
     s = re.sub(r"\'m", " am", s)
     return s
-data['tweet']=data['tweet'].apply(lambda x:contractions(x))
+df=df.apply(lambda x:contractions(x))
 
 #Remove URLS
-data['tweet']=data['tweet'].apply(lambda x: re.sub(r"((www.[^s]+)|(https?://[^s]+)|(http?://[^s]+))", '', x, flags=re.MULTILINE))
+df=df.apply(lambda x: re.sub(r"((www.[^s]+)|(https?://[^s]+)|(http?://[^s]+))", '', x, flags=re.MULTILINE))
 
 #Remove @ and #
-data['tweet']=data['tweet'].apply(lambda x: re.sub(r'@[A-Za-z0-9_]+','', x))
-data['tweet']=data['tweet'].apply(lambda x: re.sub(r'#[A-Za-z0-9_]+','', x))
+df=df.apply(lambda x: re.sub(r'@[A-Za-z0-9_]+','', x))
+df=df.apply(lambda x: re.sub(r'#[A-Za-z0-9_]+','', x))
 
 #Lowercase all words
-data['tweet']=data['tweet'].apply(lambda x: x.lower())
+df=df.apply(lambda x: x.lower())
 
 #Remove non-English characters
-data['tweet']=data['tweet'].apply(lambda x:x.encode("ascii", "ignore").decode())
+df=df.apply(lambda x:x.encode("ascii", "ignore").decode())
 
 #Remove stopwords
 stop = stopwords.words('english')
-data['tweet']=data['tweet'].apply(lambda x: " ".join([x for x in x.split() if x not in stop]))
+df=df.apply(lambda x: " ".join([x for x in x.split() if x not in stop]))
 
 #Remove numbers
-data['tweet']=data['tweet'].apply(lambda x: re.sub(r'[0-9]+', '', x))
+df=df.apply(lambda x: re.sub(r'[0-9]+', '', x))
 
 #Remove punctuations
-data['tweet']=data['tweet'].apply(lambda x: x.translate(str.maketrans("", "", string.punctuation)))
+df=df.apply(lambda x: x.translate(str.maketrans("", "", string.punctuation)))
 
 #Tokenized
 tokenizer=TweetTokenizer()
 tokenizedWords=[]
 
-for x in range(len(data['tweet'])):
+for x in range(len(df)):
     if x is not None:
-        tokenizedWords.append(tokenizer.tokenize(data['tweet'][x]))
+        tokenizedWords.append(tokenizer.tokenize(df[x]))
 
-print(tokenizedWords[1])
+#ADD ANY PRE-PROCESSING PROCESSES
+
+processed=tokenizedWords
+
+#Append changed tweet to database
+final=[]
+for x in range(len(processed)):
+    final.append(" ".join(processed[x]))
+
+out=pd.DataFrame(final)
+
+data['changedtweet']=out
+print(data.head())
+
 
 positive = data[data['sentiment']==1]
 
