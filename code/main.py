@@ -136,18 +136,26 @@ X_test = pd.DataFrame(columns = features)
 y_train = pd.DataFrame(columns = targets)
 y_test = pd.DataFrame(columns = targets)
 
+X_train_list = []
+X_test_list = []
+y_train_list = []
+y_test_list = []
+
 for category in (positive, negative, neutral):
     X = category["changedtweet"]
     y = category["sentiment"]
     Xs_train, Xs_test, ys_train, ys_test = train_test_split(X, y, random_state=0, train_size=0.5)
+    
+    X_train_list.append(Xs_train)
+    X_test_list.append(Xs_test)
+    y_train_list.append(ys_train)
+    y_test_list.append(ys_test)
 
-    X_train = pd.concat([X_train, Xs_train], ignore_index=True)
-    X_test = pd.concat([X_test, Xs_train], ignore_index=True)
-    y_train = pd.concat([y_train, ys_train], ignore_index=True)
-    y_test = pd.concat([y_test, ys_train], ignore_index=True)
 
-
+X_train = pd.concat(X_train_list, ignore_index=True)
+X_test = pd.concat(X_test_list, ignore_index=True)
+y_train = pd.concat(y_train_list, ignore_index=True)
+y_test = pd.concat(y_test_list, ignore_index=True)
+    
 print(X_train.head())
-print(X_test.head())
 print(y_train.head())
-print(y_test.head())
