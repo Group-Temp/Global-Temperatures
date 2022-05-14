@@ -7,9 +7,11 @@ from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from string import punctuation
+from nltk.stem import WordNetLemmatizer
 
-data1 = pd.read_csv('../data/kaggle_twitter_data.csv')
-data2 = pd.read_csv('../data/dataworld_twitter_data.csv')
+
+data1 = pd.read_csv('./data/kaggle_twitter_data.csv')
+data2 = pd.read_csv('./data/dataworld_twitter_data.csv')
 
 #Remove other columns
 data1 = data1[['sentiment','tweet']]
@@ -53,7 +55,9 @@ def contractions(s):
 df=df.apply(lambda x:contractions(x))
 
 #Remove URLS
-df=df.apply(lambda x: re.sub(r"((www.[^s]+)|(https?://[^s]+)|(http?://[^s]+))", '', x, flags=re.MULTILINE))
+df=df.apply(lambda x: re.sub(r"http?://[A-Za-z0-9./]+", "", x, flags=re.MULTILINE))
+df=df.apply(lambda x: re.sub(r"https?://[A-Za-z0-9./]+", "", x, flags=re.MULTILINE))
+df=df.apply(lambda x: re.sub(r"www?://[A-Za-z0-9./]+", "", x, flags=re.MULTILINE))
 
 #Remove @ and #
 df=df.apply(lambda x: re.sub(r'@[A-Za-z0-9_]+','', x))
@@ -75,17 +79,31 @@ df=df.apply(lambda x: re.sub(r'[0-9]+', '', x))
 #Remove punctuations
 df=df.apply(lambda x: x.translate(str.maketrans("", "", string.punctuation)))
 
+#Remove punctuations
+df=df.apply(lambda x: x.translate(str.maketrans("", "", string.punctuation)))
+
 #Tokenized
 tokenizer=TweetTokenizer()
-tokenizedWords=[]
+tokenizedTweets=[]
 
 for x in range(len(df)):
     if x is not None:
-        tokenizedWords.append(tokenizer.tokenize(df[x]))
+        tokenizedTweets.append(tokenizer.tokenize(df[x]))
+
+#Lemmatize
+lemmatizer = WordNetLemmatizer()
+
+for tweet in tokenizedTweets:
+    print(tweet)
+
+    for word in tweet:
+        word = lemmatizer.lemmatize(word)
+    print(tweet)
+    break
 
 #ADD ANY PRE-PROCESSING PROCESSES
 
-processed=tokenizedWords
+processed=tokenizedTweets
 
 #Append changed tweet to database
 final=[]
@@ -97,11 +115,11 @@ out=pd.DataFrame(final)
 data['changedtweet']=out
 print(data.head())
 
+# 5000 samples per label
+positive = data[data['sentiment']==1][:5000]
 
-positive = data[data['sentiment']==1]
+negative = data[data['sentiment']==-1][:5000]
 
-negative = data[data['sentiment']==-1]
+neutral = data[data['sentiment']==0][:5000]
 
-neutral = data[data['sentiment']==0]
-
-
+print(len(positive), len(negative), len(neutral))
