@@ -5,7 +5,6 @@ import string
 import nltk
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
 from string import punctuation
 from nltk.stem import WordNetLemmatizer
 from sklearn.model_selection import train_test_split
