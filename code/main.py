@@ -4,6 +4,10 @@ import string
 import contractions
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+<<<<<<< HEAD
+=======
+from string import punctuation
+>>>>>>> 533c2148730d53260b90b9405528e21dfd172749
 from nltk.stem import WordNetLemmatizer
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
