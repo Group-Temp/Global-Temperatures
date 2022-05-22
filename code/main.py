@@ -156,7 +156,7 @@ print(classification_report(y_test,predictions_SVM))
 print(accuracy_score(predictions_SVM, y_test)*100)
 
 # Classifier - Algorithm - Decision Tree
-#dt = DecisionTreeClassifier()
+dt = DecisionTreeClassifier(max_depth=10, random_state=0)
 #dt.fit(Train_X_Tfidf, y_train)
 #predictions_DecisionTree = dt.predict(Test_X_Tfidf)
 #print("Decision Tree Accuracy Score -> ",accuracy_score(predictions_DecisionTree, y_test)*100)
