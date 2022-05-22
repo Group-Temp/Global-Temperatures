@@ -27,19 +27,6 @@ frames = [data1, data2]
 data = pd.concat(frames, ignore_index=True)
 
 # Pre-processing
-# Remove other columns
-data1 = data1[["sentiment", "tweet"]]
-data2 = data2[["sentiment", "tweet"]]
-
-# Remove sentiment=2 from Kaggle data set
-data1 = data1[data1.sentiment != 2]
-
-frames = [data1, data2]
-
-# All data
-data = pd.concat(frames, ignore_index=True)
-
-# Pre-processing
 # Drop rows with NA or NAN
 data = data.dropna()
 
