@@ -1,9 +1,11 @@
 # Global-Temperatures
 
-Global Temperatures is a project that aims to find an effective machine learning algorithm that can predict whether a Twitter user supports the belief in man-made climate change. By using four term-level features and comparing two classification algorithms (i.e. decision tree and support vector machine), this initiative seeks to determine which model can serve as a better aid in knowing who to reach out to in climate change awareness campaigns.
+Global Temperatures is a project that aims to find an effective machine learning algorithm that can predict whether a Twitter user supports the belief in man-made climate change. By comparing two classification algorithms (i.e. decision tree and support vector machine) and three n-grams (i.e. unigrams, bigrams, trigrams) as features, this initiative seeks to determine which model can serve as a better aid in knowing who to reach out to in climate change awareness campaigns.
 
 Members:
-J. A. D. Estrella (THU)
-C. P. Rule (THV)
-J. C. Sumabat (THV)
-G. T. Tabanao (THX)
+<ul> 
+  <li> J. A. D. Estrella (THU) </li>
+  <li> C. P. Rule (THV) </li>
+  <li> J. C. Sumabat (THV) </li>
+  <li> G. T. Tabanao (THX) </li>
+</ul>
