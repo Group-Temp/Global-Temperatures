@@ -9,3 +9,6 @@ Members:
   <li> J. C. Sumabat (THV) </li>
   <li> G. T. Tabanao (THX) </li>
 </ul>
+
+To view the code, visit the "code" folder and access the Python Notebook, test.ipynb
+To view the databases, visit the "data" folder
